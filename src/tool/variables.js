@@ -2,7 +2,7 @@
  * @Author: hzq
  * @Date: 2019-07-08 16:18:42
  * @Last Modified by: hzq
- * @Last Modified time: 2019-07-09 18:30:07
+ * @Last Modified time: 2019-07-20 10:45:50
  * @文件说明: Vue 全局变量 封装
  */
 import color from '@/style/color.scss'
@@ -73,7 +73,13 @@ export default {
         Vue.prototype.$pageRouter = true
 
         // 是否为测试环境
-        Vue.prototype.$istest = process.env.NODE_ENV !== 'production'
+        Vue.prototype.$istest = process.env.VUE_APP_CURRENTMODE === 'test'
+
+        console.log('当前NODE_ENV：' + process.env.NODE_ENV)
+        console.log(
+            '当前VUE_APP_CURRENTMODE：' + process.env.VUE_APP_CURRENTMODE
+        )
+        console.log('是否为测试环境：' + Vue.prototype.$istest)
 
         // oss域名
         Vue.prototype.$osshost = Vue.prototype.$istest

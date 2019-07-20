@@ -2,9 +2,10 @@
  * @Author: hzq
  * @Date: 2019-07-08 16:18:25
  * @Last Modified by: hzq
- * @Last Modified time: 2019-07-10 10:02:26
+ * @Last Modified time: 2019-07-20 10:45:26
  * @文件说明: Vue 全局方法 封装
  */
+
 export default {
     install(Vue, router) {
         // 页面后退
@@ -37,8 +38,8 @@ export default {
         }
 
         // 获取地址栏上的参数对象
-        Vue.prototype.$parseQuery = () => {
-            return Vue.$tool.parseQuery(location.search.substr(1))
+        Vue.prototype.$parseQuery = (str = location.search.substr(1)) => {
+            return Vue.$tool.parseQuery(str)
         }
 
         // 日期格式化 YYYY-MM-DD hh:mm:ss
@@ -118,10 +119,13 @@ export default {
         }
 
         // 金额格式化方法：加￥和2位小数点
-        Vue.prototype.$fprice = (val, prefix = false) => {
+        Vue.prototype.$fprice = (val, type = '') => {
             val = Number(val)
             if (isNaN(val)) val = 0
-            return (prefix ? prefix || '￥' : '') + val.toFixed(2)
+            val = val.toFixed(2)
+            if (type === 'p') val = '￥' + val
+            else if (type === 's') val += '元'
+            return val
         }
 
         // 表格：根据传入的prop，将值渲染出来，可渲染金额格式的
@@ -176,6 +180,27 @@ export default {
                 // 当 页码为 1 时，直接调用方法，更新数据
                 that[api]()
             } else that.$pageTo(that) // 否则 跳转到 第一页
+        }
+
+        // // 生成二维码方法
+        // Vue.prototype.$qrcode = (host = 'www.baidu.com', obj = {}) => {
+        //     return QRCode.toDataURL(host, {
+        //         width: 250,
+        //         height: 250,
+        //         margin: 1,
+        //         ...obj
+        //     })
+        // }
+
+        // 验证值是否为空
+        Vue.prototype.$checkValEmpty = str => {
+            if (str) {
+                if (typeof str === 'object') {
+                    return Array.isArray(str)
+                        ? str.length <= 0
+                        : Object.keys(str).length <= 0
+                } else return false
+            } else return true
         }
     }
 }
